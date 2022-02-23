@@ -100,6 +100,7 @@ class Form extends Component {
             <option value="muito raro">Muito raro</option>
           </select>
         </label>
+        <br />
 
         <label htmlFor="trunfo">
           Super Trybe trunfo
@@ -112,6 +113,7 @@ class Form extends Component {
             onChange={ onInputChange }
           />
         </label>
+        <br />
 
         <button
           data-testid="save-button"
