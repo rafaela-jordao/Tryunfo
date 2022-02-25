@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from './components/Card';
 import Form from './components/Form';
+import CardList from './components/CardList';
 
 class App extends React.Component {
   constructor() {
@@ -15,25 +16,16 @@ class App extends React.Component {
       image: '',
       inputRare: 'Normal',
       trunfo: false,
+      saveBtn: true,
+      hasTrunfo: false,
+      list: [],
     };
   }
 
   handleChange = ({ target }) => {
     const { name } = target;
     const value = target.type === 'checkbox' ? target.checked : target.value;
-    this.setState({ [name]: value });
-  }
-
-  onSaveButtonClick = () => {
-    this.setState({
-      inputName: '',
-      description: '',
-      firstAttribute: 0,
-      secondAttribute: 0,
-      thirdAttribute: 0,
-      image: '',
-      inputRare: 'Normal',
-    });
+    this.setState({ [name]: value }, this.validateBtn);
   }
 
   validateBtn = () => {
@@ -68,18 +60,49 @@ class App extends React.Component {
     if (sum > limit) {
       return true;
     }
+    this.setState({ saveBtn: false });
+  }
+
+  onSaveButtonClick = (event) => {
+    event.preventDefault();
+    const { inputName, description, firstAttribute, secondAttribute, thirdAttribute,
+      image, inputRare, trunfo, saveBtn } = this.state;
+
+    const newCard = {
+      inputName,
+      description,
+      firstAttribute,
+      secondAttribute,
+      thirdAttribute,
+      image,
+      inputRare,
+      trunfo,
+      saveBtn };
+
+    this.setState((prevState) => ({
+      list: [...prevState.list, newCard],
+      hasTrunfo: [...prevState.list, newCard].some((card) => card.trunfo),
+      inputName: '',
+      description: '',
+      firstAttribute: 0,
+      secondAttribute: 0,
+      thirdAttribute: 0,
+      image: '',
+      inputRare: 'Normal',
+      trunfo: false,
+    }));
   }
 
   render() {
     const { inputName, description, firstAttribute, secondAttribute, thirdAttribute,
-      image, inputRare, trunfo } = this.state;
+      image, inputRare, trunfo, saveBtn, hasTrunfo, list } = this.state;
 
     return (
       <div>
         <Form
           onInputChange={ this.handleChange }
           onSaveButtonClick={ this.onSaveButtonClick }
-          isSaveButtonDisabled={ this.validateBtn() }
+          isSaveButtonDisabled={ saveBtn }
           cardName={ inputName }
           cardDescription={ description }
           cardAttr1={ firstAttribute }
@@ -88,6 +111,7 @@ class App extends React.Component {
           cardImage={ image }
           cardRare={ inputRare }
           cardTrunfo={ trunfo }
+          hasTrunfo={ hasTrunfo }
         />
         <Card
           onInputChange={ this.handleChange }
@@ -99,6 +123,9 @@ class App extends React.Component {
           cardImage={ image }
           cardRare={ inputRare }
           cardTrunfo={ trunfo }
+        />
+        <CardList
+          cardList={ list }
         />
       </div>
     );
