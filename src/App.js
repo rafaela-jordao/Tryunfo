@@ -16,7 +16,6 @@ class App extends React.Component {
       image: '',
       inputRare: 'Normal',
       trunfo: false,
-      saveBtn: true,
       hasTrunfo: false,
       list: [],
     };
@@ -60,7 +59,6 @@ class App extends React.Component {
     if (sum > limit) {
       return true;
     }
-    this.setState({ saveBtn: false });
   }
 
   onSaveButtonClick = (event) => {
@@ -95,14 +93,14 @@ class App extends React.Component {
 
   render() {
     const { inputName, description, firstAttribute, secondAttribute, thirdAttribute,
-      image, inputRare, trunfo, saveBtn, hasTrunfo, list } = this.state;
+      image, inputRare, trunfo, hasTrunfo, list } = this.state;
 
     return (
       <div>
         <Form
           onInputChange={ this.handleChange }
           onSaveButtonClick={ this.onSaveButtonClick }
-          isSaveButtonDisabled={ saveBtn }
+          isSaveButtonDisabled={ this.validateBtn() }
           cardName={ inputName }
           cardDescription={ description }
           cardAttr1={ firstAttribute }
